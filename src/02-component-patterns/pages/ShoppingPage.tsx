@@ -1,20 +1,44 @@
-import { ProductMap, ShoppingCart } from "../components"
+import { ProductImage, ProductTitle, ProductButtons, ProductCard } from "../components"
+import { products } from "../data/products";
+
 import '../styles/custom-styles.css'
-import { useShoppingCart } from "../hooks/useShoppingCart"
+
+const product = products[0];
 
 
 export const ShoppingPage = () => {
-
-    const { shoppingCart, onProductCountChange } = useShoppingCart();
-
     return (
         <div>
             <h1>Shopping Store</h1>
             <hr />
 
-            <ProductMap shoppingCart={ shoppingCart } onProductCountChange={ onProductCountChange } />
+            <ProductCard 
+                key={ product.id }
+                product={ product }
+                className="bg-dark text-white"
+                initialValues={{
+                    count: 4,
+                    maxCount: 10
+                }}
+            >
+                {
+                    ({ count, maxCount, isMaxCountReached, reset, increaseBy }) => (
+                        <>
+                            <ProductImage className="custom-image" />
+                            <ProductTitle className="text-bold" />
+                            <ProductButtons className="custom-buttons" />
 
-            <ShoppingCart shoppingCart={ shoppingCart } onProductCountChange={ onProductCountChange } />
+                            <button onClick={ reset }>Reset</button>
+                            <button onClick={ () => increaseBy(-2) }> -2 </button>
+                            {
+                                !isMaxCountReached && <button onClick={ () => increaseBy(+2) }> +2 </button>
+                            }
+                            <span>{ count } - { maxCount }</span>
+                        </>
+                    )
+                }
+            </ProductCard>
+
         </div>
     )
 }
